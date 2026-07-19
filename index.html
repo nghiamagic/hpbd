@@ -151,7 +151,7 @@
             const imgData = memCtx.getImageData(0, 0, memCanvas.width, memCanvas.height);
             
             // Tăng số bước nhảy (step) để giảm số lượng hạt giúp tối ưu hiệu năng (bước nhảy càng nhỏ hạt càng dày)
-            const step = window.innerWidth < 768 ? 4 : 6; 
+            const step = window.innerWidth < 768 ? 3 : 6; 
 
             for (let y = 0; y < memCanvas.height; y += step) {
                 for (let x = 0; x < memCanvas.width; x += step) {
