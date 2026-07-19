@@ -199,7 +199,7 @@
             memCanvas.height = window.innerHeight;
 
             let fontSize = Math.min(window.innerWidth / 13, 60);
-            memCtx.font = `bold ${fontSize}px 'Segoe UI', Arial`;
+            memCtx.font = `900 ${fontSize}px Arial Black, Segoe UI, sans-serif`;
             memCtx.fillStyle = '#ffffff';
             memCtx.textAlign = 'center';
             memCtx.textBaseline = 'middle';
@@ -208,7 +208,7 @@
             memCtx.fillText(text, window.innerWidth * 0.55, window.innerHeight * 0.4);
 
             const imgData = memCtx.getImageData(0, 0, memCanvas.width, memCanvas.height);
-            const step = window.innerWidth < 768 ? 4 : 5; 
+            const step = window.innerWidth < 768 ? 3 : 3; 
 
             let rawPoints = [];
             for (let y = 0; y < memCanvas.height; y += step) {
@@ -246,7 +246,7 @@ rawPoints.forEach((pt, i) => {
 
     createTextParticles(texts[textIndex]);
 
-},8000);
+},10000);
 
         function animate() {
             // Hiệu ứng vệt mờ (Trail) mượt mà cho trái tim bay
