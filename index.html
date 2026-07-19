@@ -208,7 +208,10 @@
             memCtx.fillText(text, window.innerWidth * 0.55, window.innerHeight * 0.4);
 
             const imgData = memCtx.getImageData(0, 0, memCanvas.width, memCanvas.height);
-            const step = window.innerWidth < 768 ? 3 : 3; 
+            const step =
+window.innerWidth < 480 ? 2 :
+window.innerWidth < 768 ? 3 :
+4;
 
             let rawPoints = [];
             for (let y = 0; y < memCanvas.height; y += step) {
