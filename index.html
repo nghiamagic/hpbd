@@ -44,20 +44,34 @@
         let catY = 0;
         let mouthX = 0;
         let mouthY = 0;
-        const catSize = 140; 
+        let catSize = 140; 
 
         function updateCatPosition() {
-            catY = window.innerHeight - catSize - 30;
-            mouthX = catX + (catSize * 0.65); 
-            mouthY = catY + (catSize * 0.45);
-        }
+
+    if (window.innerWidth < 480) {
+        catSize = 90;
+    } else if (window.innerWidth < 768) {
+        catSize = 110;
+    } else if (window.innerWidth < 1200) {
+        catSize = 130;
+    } else {
+        catSize = 150;
+    }
+
+    catX = window.innerWidth * 0.05;
+
+    catY = window.innerHeight - catSize - window.innerHeight * 0.04;
+
+    mouthX = catX + catSize * 0.68;
+    mouthY = catY + catSize * 0.46;
+}
         catImg.onload = updateCatPosition;
         window.addEventListener('resize', updateCatPosition);
 
         const texts = [
-            "Gửi em...",
             "Mong sao em luôn cười tươi",
-            "Chúc mừng sinh nhật em❤️"
+            "Chúc mừng sinh nhật em❤️",
+            "Gửi em..."
             
         ];
         let textIndex = 0;
@@ -198,7 +212,20 @@
             memCanvas.width = window.innerWidth;
             memCanvas.height = window.innerHeight;
 
-            let fontSize = Math.min(window.innerWidth / 13, 90);
+            let fontSize;
+
+if (window.innerWidth < 480) {
+    fontSize = 22;
+}
+else if (window.innerWidth < 768) {
+    fontSize = 30;
+}
+else if (window.innerWidth < 1024) {
+    fontSize = 42;
+}
+else {
+    fontSize = 80;
+}
             memCtx.font = `bold ${fontSize}px 'Segoe UI', Arial`;
             memCtx.fillStyle = '#ffffff';
             memCtx.textAlign = 'center';
