@@ -216,15 +216,15 @@ memCanvas.height = window.innerHeight * dpr;
 
 memCtx.scale(dpr, dpr);
 
-            let fontSize;
+           let fontSize = window.innerWidth < 768 ? 36 : 60;
 
-if (window.innerWidth < 480) {
-    fontSize = 28;
-} else if (window.innerWidth < 768) {
-    fontSize = 38;
-} else {
-    fontSize = 60;
-}
+do {
+    memCtx.font = `900 ${fontSize}px Arial`;
+    fontSize--;
+} while (
+    memCtx.measureText(text).width > window.innerWidth * 0.85 &&
+    fontSize > 18
+);
             memCtx.font = `bold ${fontSize}px 'Segoe UI', Arial`;
             memCtx.fillStyle = '#ffffff';
             memCtx.textAlign = 'center';
