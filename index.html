@@ -215,16 +215,11 @@
             let fontSize;
 
 if (window.innerWidth < 480) {
-    fontSize = 22;
-}
-else if (window.innerWidth < 768) {
-    fontSize = 30;
-}
-else if (window.innerWidth < 1024) {
-    fontSize = 42;
-}
-else {
-    fontSize = 80;
+    fontSize = 28;
+} else if (window.innerWidth < 768) {
+    fontSize = 38;
+} else {
+    fontSize = 60;
 }
             memCtx.font = `bold ${fontSize}px 'Segoe UI', Arial`;
             memCtx.fillStyle = '#ffffff';
@@ -273,10 +268,7 @@ else {
 );
 
             const imgData = memCtx.getImageData(0, 0, memCanvas.width, memCanvas.height);
-            const step =
-window.innerWidth < 480 ? 2 :
-window.innerWidth < 768 ? 3 :
-4;
+            const step = window.innerWidth < 480 ? 2 : 3;
 
             let rawPoints = [];
             for (let y = 0; y < memCanvas.height; y += step) {
