@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiệu Ứng Valentine Lấp Lánh</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0b0518; /* Màu nền trời đêm tối */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        /* Gợi ý thêm giao diện nếu bạn muốn để hộp quà ở giữa giống video */
+        .gift-box-container {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .gift-box-container:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+        .gift-box {
+            font-size: 80px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particleCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Khởi tạo kích thước canvas full màn hình
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Danh sách các câu thoại sẽ xuất hiện lần lượt
+        const textTexts = [
+            "Gửi em...",
+            "Mong sao em luôn cười tươi",
+            "Valentine vui vẻ và hạnh phúc",
+            "I LOVE YOU ❤️"
+        ];
+        let textIndex = 0;
+
+        let particles = [];
+        const colors = ['#ff4d6d', '#ff758f', '#ff8fa3', '#ffb3c1', '#fae0e4'];
+
+        // Cấu hình cho hạt tĩnh (môi trường nền trời sao)
+        let stars = [];
+        for (let i = 0; i < 100; i++) {
+            stars.push({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                radius: Math.random() * 1.5,
+                alpha: Math.random()
+            });
+        }
+
+        // Lớp đối tượng Hạt (Particle)
+        class Particle {
+            constructor(x, y, targetX, targetY) {
+                // Điểm xuất phát ngẫu nhiên từ viền dưới hoặc vị trí bất kỳ (giống như được thổi ra)
+                this.x = window.innerWidth / 2 + (Math.random() - 0.5) * 200;
+                this.y = window.innerHeight;
+                
+                this.targetX = targetX;
+                this.targetY = targetY;
+                
+                this.radius = Math.random() * 2 + 1;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Tốc độ di chuyển ban đầu
+                this.vx = (Math.random() - 0.5) * 10;
+                this.vy = -Math.random() * 15 - 5;
+                
+                this.friction = 0.95; // Lực cản
+                this.ease = 0.1;      // Độ mượt khi hút vào chữ
+                this.opacity = Math.random() * 0.5 + 0.5;
+            }
+
+            update() {
+                // Giai đoạn 1: Bay lên tự do, sau đó bị hút về tọa độ của chữ
+                this.vx += (this.targetX - this.x) * this.ease;
+                this.vy += (this.targetY - this.y) * this.ease;
+                
+                this.vx *= this.friction;
+                this.vy *= this.friction;
+
+                this.x += this.vx;
+                this.y += this.vy;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Hàm quét pixel của chữ và chuyển thành tọa độ cho hạt
+        function createTextParticles(text) {
+            particles = [];
+            
+            // Tạo một canvas ẩn để quét dữ liệu chữ
+            const memCanvas = document.createElement('canvas');
+            const memCtx = memCanvas.getContext('2d');
+            memCanvas.width = window.innerWidth;
+            memCanvas.height = window.innerHeight;
+
+            // Định dạng font chữ (tự động co giãn theo màn hình)
+            let fontSize = Math.min(window.innerWidth / 15, 60);
+            memCtx.font = `bold ${fontSize}px 'Segoe UI', Arial`;
+            memCtx.fillStyle = '#ffffff';
+            memCtx.textAlign = 'center';
+            memCtx.textBaseline = 'middle';
+            
+            // Vẽ chữ lên canvas ẩn
+            memCtx.fillText(text, window.innerWidth / 2, window.innerHeight * 0.6);
+
+            // Quét các pixel có màu (nơi có chữ)
+            const imgData = memCtx.getImageData(0, 0, memCanvas.width, memCanvas.height);
+            
+            // Tăng số bước nhảy (step) để giảm số lượng hạt giúp tối ưu hiệu năng (bước nhảy càng nhỏ hạt càng dày)
+            const step = window.innerWidth < 768 ? 4 : 6; 
+
+            for (let y = 0; y < memCanvas.height; y += step) {
+                for (let x = 0; x < memCanvas.width; x += step) {
+                    const index = (y * memCanvas.width + x) * 4;
+                    const alpha = imgData.data[index + 3];
+                    
+                    if (alpha > 128) { // Nếu pixel đó có độ hiển thị rõ
+                        particles.push(new Particle(0, 0, x, y));
+                    }
+                }
+            }
+        }
+
+        // Vòng lặp chuyển câu chữ sau mỗi 4 giây
+        setInterval(() => {
+            textIndex = (textIndex + 1) % textTexts.length;
+            createTextParticles(textTexts[textIndex]);
+        }, 4000);
+
+        // Khởi chạy câu đầu tiên
+        createTextParticles(textTexts[textIndex]);
+
+        // Vòng lặp chính hoạt hình (Animation Loop)
+        function animate() {
+            // Hiệu ứng mờ dần (trail effect) giúp các hạt có đuôi lấp lánh phía sau
+            ctx.fillStyle = 'rgba(11, 5, 24, 0.3)';
+            ctx.globalAlpha = 1;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Vẽ trời sao tĩnh phía sau
+            stars.forEach(star => {
+                ctx.fillStyle = '#ffffff';
+                ctx.globalAlpha = star.alpha;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Cho sao nhấp nháy nhẹ
+                star.alpha += (Math.random() - 0.5) * 0.05;
+                if (star.alpha < 0) star.alpha = 0;
+                if (star.alpha > 1) star.alpha = 1;
+            });
+
+            // Cập nhật và vẽ các hạt chữ
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
