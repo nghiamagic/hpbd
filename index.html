@@ -188,7 +188,7 @@
 
     }
 
-}
+
 
         function createTextParticles(text) {
             particles = [];
@@ -223,34 +223,35 @@
             // Xáo trộn ngẫu nhiên thứ tự hạt để lúc phun ra tạo thành luồng hỗn độn tự nhiên thay vì phun theo hàng lối
             rawPoints.sort(()=>Math.random()-0.5);
 
-rawPoints.forEach((pt,i)=>{
+rawPoints.sort(() => Math.random() - 0.5);
 
+rawPoints.forEach((pt, i) => {
     particles.push(
         new HeartParticle(
             pt.x,
             pt.y,
-            i*1.2
+            i * 1.2
         )
     );
-
 });
         }
 
         // Đổi câu chữ sau mỗi 6 giây (tăng thêm thời gian để kịp ngắm chữ sau khi xếp xong)
-        setInterval(() => {
-            textIndex = (textIndex + 1) % texts.length;
-            createTextParticles(texts[textIndex]);
-        }, 6000);
+        setInterval(()=>{
 
-        // Khởi chạy
-        setTimeout(() => {
-            createTextParticles(texts[textIndex]);
-        }, 8000);
+    textIndex++;
+
+    if(textIndex>=texts.length)
+        textIndex=0;
+
+    createTextParticles(texts[textIndex]);
+
+},8000);
 
         function animate() {
             // Hiệu ứng vệt mờ (Trail) mượt mà cho trái tim bay
-            ctx.fillStyle="rgba(5,5,15,0.15)";
-ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle = "rgba(5,5,15,0.15)";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             if (catImg.complete) {
                 ctx.drawImage(catImg, catX, catY, catSize, catSize);
