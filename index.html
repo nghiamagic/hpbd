@@ -199,7 +199,7 @@
             memCanvas.height = window.innerHeight;
 
             let fontSize = Math.min(window.innerWidth / 13, 60);
-            memCtx.font = `900 ${fontSize}px Arial Black, Segoe UI, sans-serif`;
+            memCtx.font = `bold ${fontSize}px 'Segoe UI', Arial`;
             memCtx.fillStyle = '#ffffff';
             memCtx.textAlign = 'center';
             memCtx.textBaseline = 'middle';
@@ -246,7 +246,7 @@ rawPoints.forEach((pt, i) => {
 
     createTextParticles(texts[textIndex]);
 
-},10000);
+},6500);
 
         function animate() {
             // Hiệu ứng vệt mờ (Trail) mượt mà cho trái tim bay
