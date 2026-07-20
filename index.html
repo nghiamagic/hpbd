@@ -326,6 +326,10 @@ do {
     });
 
 }
+            const maxWidth =
+    window.innerWidth < 768
+        ? window.innerWidth * 0.60
+        : window.innerWidth * 0.82;
             drawText(
     memCtx,
     text,
