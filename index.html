@@ -125,8 +125,8 @@ let started = false;
         window.addEventListener('resize', updateCatPosition);
 
         const texts = [
-            "Mong sao em luôn cười tươi",
             "Gửi em...",
+            "Mong sao em luôn cười tươi",
             "Chúc mừng sinh nhật em❤️"
         ];
         let textIndex = 0;
@@ -371,16 +371,23 @@ rawPoints.forEach((pt, i) => {
         }
 
         // Đổi câu chữ sau mỗi 6 giây (tăng thêm thời gian để kịp ngắm chữ sau khi xếp xong)
-        setInterval(()=>{
+        let textTimer = null;
 
-    textIndex++;
+function startEffect() {
+    resizeCanvas();
+    createTextParticles(texts[0]);
+    animate();
 
-    if(textIndex>=texts.length)
-        textIndex=0;
+    textTimer = setInterval(() => {
+        textIndex++;
 
-    createTextParticles(texts[textIndex]);
+        if (textIndex >= texts.length) {
+            textIndex = 0;
+        }
 
-},12000);
+        createTextParticles(texts[textIndex]);
+    }, 9500);
+}
 
         function animate() {
             // Hiệu ứng vệt mờ (Trail) mượt mà cho trái tim bay
@@ -424,20 +431,13 @@ giftBox.onclick = () => {
 
         giftScreen.remove();
 
-        resizeCanvas();
-        createTextParticles(texts[0]);
-        animate();
+        startEffect();
 
     }, 650);
 
 };
 
 window.addEventListener("resize", () => {
-    resizeCanvas();
-    createTextParticles(texts[textIndex]);
-});
-
-        window.addEventListener("resize", () => {
     resizeCanvas();
     createTextParticles(texts[textIndex]);
 });
