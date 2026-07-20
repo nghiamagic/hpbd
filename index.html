@@ -273,7 +273,10 @@ memCanvas.height = window.innerHeight * dpr;
 memCtx.scale(dpr, dpr);
 
            let fontSize = window.innerWidth < 768 ? 36 : 90;
-
+const maxWidth =
+    window.innerWidth < 768
+        ? window.innerWidth * 0.60
+        : window.innerWidth * 0.82;
 do {
     memCtx.font = `900 ${fontSize}px Arial`;
     fontSize--;
@@ -326,10 +329,7 @@ do {
     });
 
 }
-            const maxWidth =
-    window.innerWidth < 768
-        ? window.innerWidth * 0.60
-        : window.innerWidth * 0.82;
+           
             drawText(
     memCtx,
     text,
