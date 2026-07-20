@@ -11,13 +11,16 @@
             box-sizing: border-box;
         }
         body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #05020a;
+           margin:0;
+    overflow:hidden;
+    width:100%;
+    height:100%;
+    background:#05050f;
         }
         canvas {
-            display: block;
+            position:fixed;
+    inset:0;
+    display:block;
         }
     </style>
 </head>
@@ -29,9 +32,22 @@
         const canvas = document.getElementById('loveCanvas');
         const ctx = canvas.getContext('2d');
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+       function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
+
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.scale(dpr, dpr);
+
+    updateCatPosition();
+
+    createTextParticles(texts[textIndex]);
+}
         }
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
@@ -65,7 +81,10 @@
     mouthX = catX + catSize * 0.68;
     mouthY = catY + catSize * 0.46;
 }
-        catImg.onload = updateCatPosition;
+       catImg.onload = () => {
+    updateCatPosition();
+    createTextParticles(texts[0]);
+};
         window.addEventListener('resize', updateCatPosition);
 
         const texts = [
@@ -224,7 +243,7 @@ do {
     memCtx.measureText(text).width > window.innerWidth * 0.85 &&
     fontSize > 18
 );
-            memCtx.font = `bold ${fontSize}px 'Segoe UI', Arial`;
+            memCtx.font = `bold ${fontSize}px Arial`;
             memCtx.fillStyle = '#ffffff';
             memCtx.textAlign = 'center';
             memCtx.textBaseline = 'middle';
@@ -278,15 +297,21 @@ do {
     fontSize * 1.3
 );
 
-            const imgData = memCtx.getImageData(0, 0, memCanvas.width, memCanvas.height);
-            const step = window.innerWidth < 480 ? 2 : 3;
+            const imgData = memCtx.getImageData(
+    0,
+    0,
+    memCanvas.width,
+    memCanvas.height
+);
 
-            let rawPoints = [];
-            for (let y = 0; y < memCanvas.height; y += step) {
-                for (let x = 0; x < memCanvas.width; x += step) {
+for(let y=0;y<memCanvas.height;y+=step*dpr){
+    for(let x=0;x<memCanvas.width;x+=step*dpr){
                     const index = (y * memCanvas.width + x) * 4;
                     if (imgData.data[index + 3] > 128) {
-                        rawPoints.push({x, y});
+                        rawPoints.push({
+    x:x/dpr,
+    y:y/dpr
+});
                     }
                 }
             }
