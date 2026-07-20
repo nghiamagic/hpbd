@@ -275,7 +275,7 @@ memCtx.scale(dpr, dpr);
            let fontSize = window.innerWidth < 768 ? 36 : 90;
 
 do {
-    memCtx.font = `900 ${fontSize}px Arial`;
+    memCtx.font = `900 ${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
     fontSize--;
 } while (
     memCtx.measureText(text).width > window.innerWidth * 0.85 &&
@@ -334,7 +334,15 @@ do {
     window.innerWidth * 0.90,
     fontSize * 1.3
 );
-const step = window.innerWidth < 480 ? 4 : 3;
+let step;
+
+if (window.innerWidth < 480) {
+    step = 2;
+} else if (window.innerWidth < 768) {
+    step = 3;
+} else {
+    step = 4;
+}
             const imgData = memCtx.getImageData(
     0,
     0,
@@ -343,8 +351,8 @@ const step = window.innerWidth < 480 ? 4 : 3;
 );
 let rawPoints = [];
             
-for (let y = 0; y < memCanvas.height; y += step * dpr) {
-    for (let x = 0; x < memCanvas.width; x += step * dpr) {
+ffor (let y = 0; y < memCanvas.height; y += step) {
+    for (let x = 0; x < memCanvas.width; x += step) {
                     const index = (y * memCanvas.width + x) * 4;
                     if (imgData.data[index + 3] > 128) {
                         rawPoints.push({
@@ -391,7 +399,7 @@ function startEffect() {
 
         function animate() {
             // Hiệu ứng vệt mờ (Trail) mượt mà cho trái tim bay
-ctx.fillStyle = "rgba(5,5,15,0.15)";
+ctx.fillStyle = "rgba(5,5,15,0.08)";
 ctx.fillRect(
     0,
     0,
