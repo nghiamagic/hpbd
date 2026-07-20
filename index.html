@@ -351,7 +351,7 @@ if (window.innerWidth < 480) {
 );
 let rawPoints = [];
             
-ffor (let y = 0; y < memCanvas.height; y += step) {
+for (let y = 0; y < memCanvas.height; y += step) {
     for (let x = 0; x < memCanvas.width; x += step) {
                     const index = (y * memCanvas.width + x) * 4;
                     if (imgData.data[index + 3] > 128) {
