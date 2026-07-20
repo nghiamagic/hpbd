@@ -275,7 +275,7 @@ memCtx.scale(dpr, dpr);
            let fontSize = window.innerWidth < 768 ? 36 : 90;
 
 do {
-    memCtx.font = `900 ${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+    memCtx.font = `bold ${fontSize}px Arial`;
     fontSize--;
 } while (
     memCtx.measureText(text).width > window.innerWidth * 0.85 &&
