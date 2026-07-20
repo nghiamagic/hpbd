@@ -366,8 +366,10 @@ ctx.fillRect(
 
             requestAnimationFrame(animate);
         }
+resizeCanvas();
+createTextParticles(texts[0]);
+animate();
 
-        animate();
         window.addEventListener("resize", () => {
     resizeCanvas();
     createTextParticles(texts[textIndex]);
