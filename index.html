@@ -275,13 +275,13 @@ memCtx.scale(dpr, dpr);
            let fontSize = window.innerWidth < 768 ? 36 : 90;
 
 do {
-    memCtx.font = `bold ${fontSize}px Arial`;
+    memCtx.font = `900 ${fontSize}px Arial`;
     fontSize--;
 } while (
     memCtx.measureText(text).width > window.innerWidth * 0.85 &&
-    fontSize > 18
+    fontSize > 30
 );
-            memCtx.font = `bold ${fontSize}px Arial`;
+            memCtx.font = `900 ${fontSize}px Arial`;
             memCtx.fillStyle = '#ffffff';
             memCtx.textAlign = 'center';
             memCtx.textBaseline = 'middle';
