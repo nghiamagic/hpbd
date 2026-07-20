@@ -281,7 +281,7 @@ do {
     memCtx.measureText(text).width > window.innerWidth * 0.85 &&
     fontSize > 18
 );
-            
+            memCtx.font = `bold ${fontSize}px Arial`;
             memCtx.fillStyle = '#ffffff';
             memCtx.textAlign = 'center';
             memCtx.textBaseline = 'middle';
@@ -394,7 +394,7 @@ function startEffect() {
         }
 
         createTextParticles(texts[textIndex]);
-    }, 9500);
+    }, 11500);
 }
 
         function animate() {
