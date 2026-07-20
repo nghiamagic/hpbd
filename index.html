@@ -41,14 +41,15 @@
     canvas.style.width = window.innerWidth + "px";
     canvas.style.height = window.innerHeight + "px";
 
-    ctx.setTransform(1,0,0,1,0,0);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(dpr, dpr);
 
     updateCatPosition();
 
-    createTextParticles(texts[textIndex]);
+    if (typeof texts !== "undefined") {
+        createTextParticles(texts[textIndex]);
+    }
 }
-        }
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
@@ -303,9 +304,10 @@ do {
     memCanvas.width,
     memCanvas.height
 );
-
-for(let y=0;y<memCanvas.height;y+=step*dpr){
-    for(let x=0;x<memCanvas.width;x+=step*dpr){
+let rawPoints = [];
+            
+for (let y = 0; y < memCanvas.height; y += step * dpr) {
+    for (let x = 0; x < memCanvas.width; x += step * dpr) {
                     const index = (y * memCanvas.width + x) * 4;
                     if (imgData.data[index + 3] > 128) {
                         rawPoints.push({
@@ -347,7 +349,12 @@ rawPoints.forEach((pt, i) => {
         function animate() {
             // Hiệu ứng vệt mờ (Trail) mượt mà cho trái tim bay
 ctx.fillStyle = "rgba(5,5,15,0.15)";
-ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.fillRect(
+    0,
+    0,
+    window.innerWidth,
+    window.innerHeight
+);
 
             if (catImg.complete) {
                 ctx.drawImage(catImg, catX, catY, catSize, catSize);
