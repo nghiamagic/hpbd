@@ -22,16 +22,59 @@
     inset:0;
     display:block;
         }
+        #giftScreen{
+    position:fixed;
+    inset:0;
+    background:#05050f;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+#giftBox{
+    width:170px;
+    cursor:pointer;
+    animation:giftFloat 1.2s ease-in-out infinite alternate;
+}
+
+#giftScreen p{
+    color:#fff;
+    font-size:28px;
+    margin-top:30px;
+}
+
+#giftScreen span{
+    color:#ff99aa;
+    margin-top:10px;
+}
+
+@keyframes giftFloat{
+    from{
+        transform:translateY(0) scale(1);
+    }
+    to{
+        transform:translateY(-12px) scale(1.06);
+    }
+}
     </style>
 </head>
 <body>
-
+<div id="giftScreen">
+    <img id="giftBox" src="gift.png" alt="">
+    <p>🎉 Có một món quà dành cho em ❤️</p>
+    <span>Chạm vào hộp quà để mở</span>
+</div>
     <canvas id="loveCanvas"></canvas>
 
     <script>
         const canvas = document.getElementById('loveCanvas');
         const ctx = canvas.getContext('2d');
+const giftScreen = document.getElementById("giftScreen");
+const giftBox = document.getElementById("giftBox");
 
+let started = false;
        function resizeCanvas() {
     const dpr = window.devicePixelRatio || 1;
 
@@ -360,9 +403,39 @@ ctx.fillRect(
 
             requestAnimationFrame(animate);
         }
-resizeCanvas();
-createTextParticles(texts[0]);
-animate();
+giftBox.onclick = () => {
+
+    if (started) return;
+
+    started = true;
+
+    giftScreen.animate(
+        [
+            { transform: "scale(1)", opacity: 1 },
+            { transform: "scale(2)", opacity: 0 }
+        ],
+        {
+            duration: 700,
+            fill: "forwards"
+        }
+    );
+
+    setTimeout(() => {
+
+        giftScreen.remove();
+
+        resizeCanvas();
+        createTextParticles(texts[0]);
+        animate();
+
+    }, 650);
+
+};
+
+window.addEventListener("resize", () => {
+    resizeCanvas();
+    createTextParticles(texts[textIndex]);
+});
 
         window.addEventListener("resize", () => {
     resizeCanvas();
