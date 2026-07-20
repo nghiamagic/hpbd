@@ -46,9 +46,6 @@
 
     updateCatPosition();
 
-    if (typeof texts !== "undefined") {
-        createTextParticles(texts[textIndex]);
-    }
 }
        
 
@@ -97,8 +94,7 @@
         ];
         let textIndex = 0;
         let particles = [];
-         resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+         
         const colors = ['#ff3366', '#ff5c8a', '#ff85a2', '#fbb1bd', '#f7cad0'];
 
         function drawHeart(x, y, size, color, alpha) {
@@ -372,6 +368,10 @@ ctx.fillRect(
         }
 
         animate();
+        window.addEventListener("resize", () => {
+    resizeCanvas();
+    createTextParticles(texts[textIndex]);
+});
     </script>
 </body>
 </html>
