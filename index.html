@@ -278,7 +278,7 @@ do {
     memCtx.font = `900 ${fontSize}px Arial`;
     fontSize--;
 } while (
-    memCtx.measureText(text).width > window.innerWidth * 0.85 &&
+    memCtx.measureText(text).width > maxWidth &&
     fontSize > 30
 );
             memCtx.font = `900 ${fontSize}px Arial`;
