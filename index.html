@@ -161,7 +161,11 @@ let started = false;
 
         this.delay = delay;
 
-        this.size = 2 + Math.random() * 3;
+        if (window.innerWidth < 768) {
+    this.size = 1.2 + Math.random() * 1.2;
+} else {
+    this.size = 2 + Math.random() * 3;
+}
         this.color = colors[Math.floor(Math.random()*colors.length)];
 
         const angle =
