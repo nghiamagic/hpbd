@@ -83,7 +83,10 @@
 }
        catImg.onload = () => {
     updateCatPosition();
-    createTextParticles(texts[0]);
+
+    if (typeof texts !== "undefined") {
+        createTextParticles(texts[0]);
+    }
 };
         window.addEventListener('resize', updateCatPosition);
 
@@ -298,7 +301,7 @@ do {
     window.innerWidth * 0.90,
     fontSize * 1.3
 );
-
+const step = window.innerWidth < 480 ? 5 : 4;
             const imgData = memCtx.getImageData(
     0,
     0,
@@ -322,7 +325,6 @@ for (let y = 0; y < memCanvas.height; y += step * dpr) {
             // Xáo trộn ngẫu nhiên thứ tự hạt để lúc phun ra tạo thành luồng hỗn độn tự nhiên thay vì phun theo hàng lối
             rawPoints.sort(()=>Math.random()-0.5);
 
-rawPoints.sort(() => Math.random() - 0.5);
 
 rawPoints.forEach((pt, i) => {
     particles.push(
