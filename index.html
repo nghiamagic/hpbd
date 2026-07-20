@@ -78,13 +78,7 @@
     mouthX = catX + catSize * 0.68;
     mouthY = catY + catSize * 0.46;
 }
-       catImg.onload = () => {
-    updateCatPosition();
-
-    if (typeof texts !== "undefined") {
-        createTextParticles(texts[0]);
-    }
-};
+       catImg.onload = updateCatPosition;
         window.addEventListener('resize', updateCatPosition);
 
         const texts = [
